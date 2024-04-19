@@ -22,7 +22,7 @@ const AddDrinks = () => {
     Juice: require("C:/Users/hp/SmartFridge/assets/images/juice.png"),
     Soda: require("C:/Users/hp/SmartFridge/assets/images/coke.png"),
     Milk: require("C:/Users/hp/SmartFridge/assets/images/milk.png"),
-    Others: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    Others: require("C:/Users/hp/SmartFridge/assets/images/othersDrinks.png"),
   };
 
   const handleIconSelect = (iconName) => {

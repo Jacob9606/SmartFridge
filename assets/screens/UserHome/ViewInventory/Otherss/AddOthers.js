@@ -20,7 +20,7 @@ const AddOthers = () => {
 
   // 예시 아이콘들, 실제 앱에서 사용하시는 이미지 경로로 교체해주세요.
   const icons = {
-    Others: require("../../../../assets/images/others.png"),
+    Others: require("../../../../../assets/images/others.png"),
     // 다른 아이콘들 추가하기
   };
 

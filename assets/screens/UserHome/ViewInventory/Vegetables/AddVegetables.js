@@ -20,15 +20,15 @@ const AddVegetables = () => {
 
   // 예시 아이콘들, 실제 앱에서 사용하시는 이미지 경로로 교체해주세요.
   const icons = {
-    Cabbage: require("./assets/cabbage.png"),
-    Carrot: require("./assets/carrot.png"),
-    Tomato: require("./assets/tomato.png"),
-    Onion: require("./assets/onion.png"),
-    BokChoy: require("./assets/bok_choy.png"),
-    RedChili: require("./assets/red_chili.png"),
-    Mushroom: require("./assets/mushroom.png"),
-    Garlic: require("./assets/garlic.png"),
-    Others: require("./assets/others.png"),
+    Cabbage: require("C:/Users/hp/SmartFridge/assets/images/cabbage.png"),
+    Carrot: require("C:/Users/hp/SmartFridge/assets/images/carrot.png"),
+    Tomato: require("C:/Users/hp/SmartFridge/assets/images/tomato.png"),
+    Onion: require("C:/Users/hp/SmartFridge/assets/images/onion.png"),
+    BokChoy: require("C:/Users/hp/SmartFridge/assets/images/bokChoy.png"),
+    RedChili: require("C:/Users/hp/SmartFridge/assets/images/chili.png"),
+    Mushroom: require("C:/Users/hp/SmartFridge/assets/images/mushroom.png"),
+    Garlic: require("C:/Users/hp/SmartFridge/assets/images/garlic.png"),
+    Others: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
   };
 
   const handleIconSelect = (iconName) => {

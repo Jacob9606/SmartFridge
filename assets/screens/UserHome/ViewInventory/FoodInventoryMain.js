@@ -9,12 +9,36 @@ import {
 } from "react-native";
 
 const categories = [
-  { id: "1", title: "Fruits", image: require("./icons/fruits.png") },
-  { id: "2", title: "Vegetables", image: require("./icons/vegetables.png") },
-  { id: "3", title: "Meat", image: require("./icons/meat.png") },
-  { id: "4", title: "Drinks", image: require("./icons/drinks.png") },
-  { id: "5", title: "Sauce", image: require("./icons/sauce.png") },
-  { id: "6", title: "Others", image: require("./icons/others.png") },
+  {
+    id: "1",
+    title: "Fruits",
+    image: require("C:/Users/hp/SmartFridge/assets/images/fruit.png"),
+  },
+  {
+    id: "2",
+    title: "Vegetables",
+    image: require("C:/Users/hp/SmartFridge/assets/images/vegetable.png"),
+  },
+  {
+    id: "3",
+    title: "Meat",
+    image: require("C:/Users/hp/SmartFridge/assets/images/meat.png"),
+  },
+  {
+    id: "4",
+    title: "Drinks",
+    image: require("C:/Users/hp/SmartFridge/assets/images/drinks.png"),
+  },
+  {
+    id: "5",
+    title: "Sauce",
+    image: require("C:/Users/hp/SmartFridge/assets/images/sauces.png"),
+  },
+  {
+    id: "6",
+    title: "Others",
+    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+  },
 ];
 
 const FoodInventoryMain = () => {

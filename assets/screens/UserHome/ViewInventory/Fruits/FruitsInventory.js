@@ -12,21 +12,21 @@ import {
 const fruitsData = [
   {
     id: "1",
-    name: "Apple",
+    name: "apple",
     kcal: "250 Kcal",
     quantity: 3,
     expiryDate: "01/04",
   },
   {
     id: "2",
-    name: "Strawberry",
+    name: "strawberry",
     kcal: "250 Kcal",
     quantity: 2,
     expiryDate: "01/04",
   },
   {
     id: "3",
-    name: "Lemon",
+    name: "lemon",
     kcal: "250 Kcal",
     quantity: 3,
     expiryDate: "01/04",
@@ -39,10 +39,24 @@ const FruitsInventory = () => {
 
   const renderFruitItem = ({ item }) => (
     <View style={styles.fruitItem}>
-      <Image
-        source={require(`./icons/${item.name.toLowerCase()}.png`)} // Icons should be named by fruit name in lowercase
-        style={styles.fruitImage}
-      />
+      {item.name === "apple" && (
+        <Image
+          source={require("C:/Users/hp/SmartFridge/assets/images/apple.png")}
+          style={styles.fruitImage}
+        />
+      )}
+      {item.name === "lemon" && (
+        <Image
+          source={require("C:/Users/hp/SmartFridge/assets/images/lemon.png")}
+          style={styles.fruitImage}
+        />
+      )}
+      {item.name === "strawberry" && (
+        <Image
+          source={require("C:/Users/hp/SmartFridge/assets/images/strawberry.png")}
+          style={styles.fruitImage}
+        />
+      )}
       <View style={styles.fruitDetails}>
         <Text style={styles.fruitName}>{item.name}</Text>
         <Text style={styles.fruitInfo}>{item.kcal}</Text>

@@ -15,21 +15,21 @@ const sauceData = [
     name: "Soy Sauce",
     kcal: "250 Kcal",
     quantity: 3,
-    image: require("./icons/soy_sauce.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/soySauce.png"), // 경로 수정
   },
   {
     id: "2",
     name: "Ketchup",
     kcal: "250 Kcal",
     quantity: 4,
-    image: require("./icons/ketchup.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/ketchup.png"),
   },
   {
     id: "3",
     name: "Mustard",
     kcal: "800 Kcal",
     quantity: 2,
-    image: require("./icons/mustard.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/mustard.png"),
   },
   // Add more sauces as needed
 ];

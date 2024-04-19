@@ -18,12 +18,11 @@ const AddSauce = () => {
   });
   const [selectedIcon, setSelectedIcon] = useState("Ketchup");
 
-  // 예시 아이콘들, 실제 앱에서 사용하시는 이미지 경로로 교체해주세요.
   const icons = {
-    SoySauce: require("./assets/soy_sauce.png"),
-    Ketchup: require("./assets/ketchup.png"),
-    Mustard: require("./assets/mustard.png"),
-    Others: require("./assets/others.png"),
+    SoySauce: require("C:/Users/hp/SmartFridge/assets/images/soySauce.png"),
+    Ketchup: require("C:/Users/hp/SmartFridge/assets/images/ketchup.png"),
+    Mustard: require("C:/Users/hp/SmartFridge/assets/images/mustard.png"),
+    Others: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
   };
 
   const handleIconSelect = (iconName) => {

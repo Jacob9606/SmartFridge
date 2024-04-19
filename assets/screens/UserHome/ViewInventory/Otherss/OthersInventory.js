@@ -15,21 +15,21 @@ const othersData = [
     name: "Kimchi",
     kcal: "250 Kcal",
     quantity: 2,
-    image: require("./icons/Kimchi.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
   },
   {
     id: "2",
     name: "Seafood",
     kcal: "250 Kcal",
     quantity: 4,
-    image: require("./icons/Seafood.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
   },
   {
     id: "3",
     name: "Bibimbap",
     kcal: "800 Kcal",
     quantity: 2,
-    image: require("./icons/bibimbap.png"),
+    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
   },
   // Add more items as needed
 ];
