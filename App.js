@@ -9,7 +9,7 @@ import ForgotPassword from "./assets/screens/Login/ForgotPassword";
 import ResetPassword from "./assets/screens/Login/ResetPassword";
 
 import AddProfile from "./assets/screens/Profile/AddProfile";
-import JacobProfile from "./assets/screens/Profile/JacobProfile";
+import Profile from "./assets/screens/Profile/Profile";
 import Profile1Home from "./assets/screens/Profile/Profile1Home";
 import ProfileMain from "./assets/screens/Profile/ProfileMain";
 import SetAlarm from "./assets/screens/Profile/SetAlarm";
@@ -40,8 +40,8 @@ import FruitsInventory from "./assets/screens/UserHome/ViewInventory/Fruits/Frui
 import SetUpFruits from "./assets/screens/UserHome/ViewInventory/Fruits/SetUpFruits";
 
 import AddMeats from "./assets/screens/UserHome/ViewInventory/Meats/AddMeats";
-import MeatsInventory from "./assets/screens/UserHome/ViewInventory/Meats/SetUpMeats";
-import SetUpMeats from "./assets/screens/UserHome/ViewInventory/Meats/AddMeats";
+import MeatsInventory from "./assets/screens/UserHome/ViewInventory/Meats/MeatsInventory";
+import SetUpMeats from "./assets/screens/UserHome/ViewInventory/Meats/SetUpMeats";
 
 import AddOthers from "./assets/screens/UserHome/ViewInventory/Otherss/AddOthers";
 import OthersInventory from "./assets/screens/UserHome/ViewInventory/Otherss/OthersInventory";
@@ -54,8 +54,7 @@ import SetUpSauce from "./assets/screens/UserHome/ViewInventory/Sauce/SetUpSauce
 import AddVegetables from "./assets/screens/UserHome/ViewInventory/Vegetables/AddVegetables";
 import SetUpVegetables from "./assets/screens/UserHome/ViewInventory/Vegetables/SetUpVegetables";
 import VegetablesInventory from "./assets/screens/UserHome/ViewInventory/Vegetables/VegetablesInventory";
-
-import FoodInventoryMain from "./assets/screens/UserHome/ViewInventory/FoodInventoryMain";
+import TestAlarm from "./assets/screens/Profile/TestAlarm";
 
 const Stack = createStackNavigator();
 
@@ -67,6 +66,22 @@ function App() {
           name="Login"
           component={Login}
           options={{ title: "Login" }}
+        />
+        <Stack.Screen
+          name="TestAlarm"
+          component={TestAlarm}
+          options={{ title: "TestAlarm" }}
+        />
+        <Stack.Screen
+          name="ProfileMain"
+          component={ProfileMain}
+          options={{ title: "ProfileMain" }}
+        />
+
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ title: "Profile" }}
         />
         <Stack.Screen
           name="CreateAccount"
@@ -88,21 +103,13 @@ function App() {
           component={AddProfile}
           options={{ title: "AddProfile" }}
         />
-        <Stack.Screen
-          name="JacobProfile"
-          component={JacobProfile}
-          options={{ title: "JacobProfile" }}
-        />
+
         <Stack.Screen
           name="Profile1Home"
           component={Profile1Home}
           options={{ title: "Profile1Home" }}
         />
-        <Stack.Screen
-          name="ProfileMain"
-          component={ProfileMain}
-          options={{ title: "ProfileMain" }}
-        />
+
         <Stack.Screen
           name="SetAlarm"
           component={SetAlarm}
@@ -262,11 +269,6 @@ function App() {
           name="VegetablesInventory"
           component={VegetablesInventory}
           options={{ title: "VegetablesInventory" }}
-        />
-        <Stack.Screen
-          name="FoodInventoryMain"
-          component={FoodInventoryMain}
-          options={{ title: "FoodInventoryMain" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

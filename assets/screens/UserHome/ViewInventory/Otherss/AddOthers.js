@@ -8,8 +8,11 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddOthers = () => {
+  const navigation = useNavigation(); // 내비게이션 객체 가져오기
+
   const [otherData, setOtherData] = useState({
     productName: "Other",
     quantity: "1",
@@ -31,6 +34,7 @@ const AddOthers = () => {
   const handleAddOthers = () => {
     // 기타 항목 추가 로직 처리
     console.log("Added Others:", otherData, "Selected Icon:", selectedIcon);
+    navigation.navigate("OthersInventory"); // OthersInventory로 이동
   };
 
   return (

@@ -6,19 +6,22 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // React Navigation에서 useNavigation 가져오기
 
 const SetUpDrinks = () => {
+  const navigation = useNavigation(); // 내비게이션 객체 가져오기
   const [isCritical, setIsCritical] = useState(null);
   const [quantity, setQuantity] = useState("");
 
   const handleAddDrinks = () => {
-    // Logic to add Drinks with the specified critical status and quantity
+    // Logic to add drinks with the specified critical status and quantity
     console.log(
-      "Adding Drinks with quantity:",
+      "Adding drinks with quantity:",
       quantity,
       "Critical:",
       isCritical
     );
+    navigation.navigate("DrinksInventory"); // DrinksInventory로 이동
   };
 
   return (
@@ -47,14 +50,18 @@ const SetUpDrinks = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.questionText}>Set Quantity for the alarm</Text>
-      <TextInput
-        style={styles.quantityInput}
-        placeholder="Type the quantity"
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
+      {isCritical && (
+        <>
+          <Text style={styles.questionText}>Set Quantity for the alarm</Text>
+          <TextInput
+            style={styles.quantityInput}
+            placeholder="Type the quantity"
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+        </>
+      )}
 
       <TouchableOpacity
         style={styles.addDrinksButton}

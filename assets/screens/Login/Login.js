@@ -7,21 +7,48 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { storeEmail } from "../clientStorage";
+import { BASE_URL } from "../../../config";
 
-const Login = ({ navigation }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation(); // useNavigation 훅 사용
 
   const logo = require("../../../assets/images/SmartFridgeLogo.png");
 
   const handleSignIn = () => {
-    // Implement your sign-in logic here
-    console.log("Sign in with:", email, password);
-  };
+    const userData = {
+      email: email,
+      password: password,
+    };
 
-  const handleForgotPassword = () => {
-    // Navigate to your forgot password screen or handle password reset
-    console.log("Navigate to forgot password screen");
+    fetch(BASE_URL + "/users/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Sign in successful:", data);
+        // Save email to client storage
+        storeEmail(email);
+        // Navigate to ProfileMain screen or do something else with the data
+        navigation.navigate("ProfileMain");
+      })
+      .catch((error) => {
+        console.error("Error signing in:", error);
+        // Handle error here, like showing an alert
+        alert("Failed to sign in. Please try again.");
+      });
   };
 
   return (
@@ -47,7 +74,7 @@ const Login = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign In</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleForgotPassword}>
+      <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
         <Text style={styles.forgotPassword}>Forgot Password</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("CreateAccount")}>

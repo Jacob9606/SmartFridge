@@ -5,18 +5,56 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from "react-native";
+import { BASE_URL } from "../../../config";
+import { useNavigation } from "@react-navigation/native";
 
 const CreateAccount = () => {
-  const [fullName, setFullName] = useState("");
+  const [fullname, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigation = useNavigation();
 
   const handleCreateAccount = () => {
-    // 여기서 계정 생성 로직을 처리합니다.
-    // 예를 들어 입력값 검증, 백엔드 서버로 데이터 전송 등
-    console.log("Creating account...");
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      console.log("Passwords do not match");
+      return;
+    }
+
+    // Prepare data object
+    const userData = {
+      fullname: fullname,
+      email: email,
+      password: password,
+    };
+
+    // Send data to server
+    fetch(BASE_URL + "/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.body);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Account created successfully:", data);
+        Alert.alert("Account created successfully!"); // Corrected line
+        navigation.navigate("Login");
+        // Do something with the response data if needed
+      })
+
+      .catch((error) => {
+        console.error("Error creating account:", error);
+      });
   };
 
   return (
@@ -26,7 +64,7 @@ const CreateAccount = () => {
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        value={fullName}
+        value={fullname}
         onChangeText={setFullName}
       />
 

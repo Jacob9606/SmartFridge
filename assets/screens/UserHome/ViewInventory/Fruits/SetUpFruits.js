@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,19 +6,91 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { getEmail } from "../../../clientStorage";
+import { BASE_URL } from "../../../../../config";
 
-const SetUpFruits = () => {
-  const [isCritical, setIsCritical] = useState(null);
+const SetUpFruits = ({ route }) => {
+  const navigation = useNavigation();
+  const { fruitData, selectedIcon } = route.params;
+  const [crucial, setIsCritical] = useState(null);
   const [quantity, setQuantity] = useState("");
+  const [email, setEmail] = useState(null);
+
+  useEffect(() => {
+    async function fetchEmail() {
+      const userEmail = await getEmail();
+      setEmail(userEmail);
+    }
+    fetchEmail();
+
+    // Log fruitsData when it's available
+    console.log("fruitsData:", fruitData);
+  }, [fruitData]); // useEffect will run whenever fruitData changes
+
+  // Log the selection of Critical Item and the Quantity set
+  useEffect(() => {
+    if (crucial !== null) {
+      console.log("Critical Item Selected:", crucial ? "Yes" : "No");
+    }
+    if (crucial && quantity) {
+      console.log("Quantity for the alarm:", quantity);
+    }
+  }, [crucial, quantity]);
 
   const handleAddFruits = () => {
-    // Logic to add fruits with the specified critical status and quantity
-    console.log(
-      "Adding fruits with quantity:",
-      quantity,
-      "Critical:",
-      isCritical
-    );
+    // Check if email is available
+    if (!email) {
+      alert("Email is not available.");
+      return;
+    }
+
+    // Check if isCritical and quantity are appropriately set
+    if (crucial === null || (!crucial && !quantity)) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    // Create userData object
+    const userData = {
+      ...fruitData,
+      selectedIcon: selectedIcon,
+      crucial: crucial,
+      email: email, // Include user's email
+    };
+
+    // Add quantity to userData if isCritical
+    if (crucial) {
+      userData.quantity = parseInt(quantity);
+    }
+
+    // Log fruitsData, isCritical, and quantity when Add Fruits button is pressed
+    console.log("fruitsData on Add Fruits button press:", fruitData);
+    console.log("Is it a Critical Item on Add Fruits button press:", crucial);
+    console.log("Quantity on Add Fruits button press:", quantity);
+
+    // Send POST request to add fruits
+    fetch(BASE_URL + `/users/${email}/additem`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fruits added successfully:", data);
+        navigation.navigate("FruitsInventory");
+      })
+      .catch((error) => {
+        console.error("Error adding fruits:", error);
+        alert("Failed to add fruits. Please try again later.");
+      });
   };
 
   return (
@@ -30,7 +102,7 @@ const SetUpFruits = () => {
         <TouchableOpacity
           style={[
             styles.choiceButton,
-            isCritical === true && styles.selectedButton,
+            crucial === true && styles.selectedButton,
           ]}
           onPress={() => setIsCritical(true)}
         >
@@ -39,7 +111,7 @@ const SetUpFruits = () => {
         <TouchableOpacity
           style={[
             styles.choiceButton,
-            isCritical === false && styles.selectedButton,
+            crucial === false && styles.selectedButton,
           ]}
           onPress={() => setIsCritical(false)}
         >
@@ -47,14 +119,18 @@ const SetUpFruits = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.questionText}>Set Quantity for the alarm</Text>
-      <TextInput
-        style={styles.quantityInput}
-        placeholder="Type the quantity"
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
+      {crucial && (
+        <>
+          <Text style={styles.questionText}>Set Quantity for the alarm</Text>
+          <TextInput
+            style={styles.quantityInput}
+            placeholder="Type the quantity"
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+        </>
+      )}
 
       <TouchableOpacity
         style={styles.addFruitsButton}
@@ -95,7 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   selectedButton: {
-    backgroundColor: "#c2f0c2", // Or any color to indicate selection
+    backgroundColor: "#c2f0c2",
   },
   buttonText: {
     color: "#000",

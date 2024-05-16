@@ -2,61 +2,88 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   FlatList,
   Image,
+  TextInput,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const sauceData = [
+const saucesData = [
   {
     id: "1",
-    name: "Soy Sauce",
+    name: "soySauce",
     kcal: "250 Kcal",
     quantity: 3,
-    image: require("C:/Users/hp/SmartFridge/assets/images/soySauce.png"), // 경로 수정
+    expiryDate: "01/04",
   },
   {
     id: "2",
-    name: "Ketchup",
+    name: "ketchup",
     kcal: "250 Kcal",
-    quantity: 4,
-    image: require("C:/Users/hp/SmartFridge/assets/images/ketchup.png"),
+    quantity: 2,
+    expiryDate: "01/04",
   },
   {
     id: "3",
-    name: "Mustard",
-    kcal: "800 Kcal",
-    quantity: 2,
-    image: require("C:/Users/hp/SmartFridge/assets/images/mustard.png"),
+    name: "mustard",
+    kcal: "250 Kcal",
+    quantity: 3,
+    expiryDate: "01/04",
   },
-  // Add more sauces as needed
+  // Add more sauces here
 ];
 
 const SauceInventory = () => {
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
 
   const renderSauceItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.itemKcal}>{item.kcal}</Text>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemQuantity}>{item.quantity}</Text>
+    <View style={styles.sauceItem}>
+      {item.name === "soySauce" && (
+        <Image
+          source={require("../../../../images/soySauce.png")}
+          style={styles.sauceImage}
+        />
+      )}
+      {item.name === "ketchup" && (
+        <Image
+          source={require("../../../../images/ketchup.png")}
+          style={styles.sauceImage}
+        />
+      )}
+      {item.name === "mustard" && (
+        <Image
+          source={require("../../../../images/mustard.png")}
+          style={styles.sauceImage}
+        />
+      )}
+      <View style={styles.sauceDetails}>
+        <Text style={styles.sauceName}>{item.name}</Text>
+        <Text style={styles.sauceInfo}>{item.kcal}</Text>
+        <Text style={styles.sauceInfo}>Expired date: {item.expiryDate}</Text>
       </View>
+      <Text style={styles.quantity}>{item.quantity}</Text>
       <TouchableOpacity
         onPress={() => {
-          /* Handle liking the sauce */
+          /* Logic to mark as bought */
         }}
       >
-        <Text style={styles.likeIcon}>❤️</Text>
+        <Text>✓</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          /* Logic to delete item */
+        }}
+      >
+        <Text>🗑</Text>
       </TouchableOpacity>
     </View>
   );
 
   const addSauce = () => {
-    // Logic to add a new sauce to the inventory
+    navigation.navigate("AddSauce");
   };
 
   return (
@@ -69,9 +96,7 @@ const SauceInventory = () => {
         placeholder="Search"
       />
       <FlatList
-        data={sauceData.filter((sauce) =>
-          sauce.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )}
+        data={saucesData}
         renderItem={renderSauceItem}
         keyExtractor={(item) => item.id}
       />
@@ -92,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   searchBox: {
     height: 40,
@@ -101,40 +126,36 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 10,
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  itemContainer: {
+  sauceItem: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
     padding: 10,
-    marginHorizontal: 20,
-    marginBottom: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
-  detailsContainer: {
-    flex: 1,
-    marginLeft: 10,
-  },
-  itemImage: {
+  sauceImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
   },
-  itemName: {
-    fontSize: 18,
+  sauceDetails: {
+    marginLeft: 10,
+    flex: 1,
+  },
+  sauceName: {
     fontWeight: "bold",
+    fontSize: 18,
   },
-  itemKcal: {
+  sauceInfo: {
     fontSize: 16,
   },
-  itemQuantity: {
-    fontSize: 16,
-    marginTop: 5,
-  },
-  likeIcon: {
-    fontSize: 24,
-    color: "pink",
+  quantity: {
+    marginRight: 10,
+    fontSize: 18,
   },
   addButton: {
     backgroundColor: "pink",

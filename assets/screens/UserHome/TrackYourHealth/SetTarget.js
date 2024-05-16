@@ -1,36 +1,87 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 const SetTarget = () => {
-  const [calorieTarget, setCalorieTarget] = useState("");
+  const navigation = useNavigation(); // navigation 변수 선언
 
-  const handleSaveTarget = () => {
-    // Save the calorie target to state, send to a server or store in local storage
-    console.log("Calorie target saved:", calorieTarget);
-    // Implement the save functionality
+  const [calorieTarget, setCalorieTarget] = useState("");
+  const [savedTarget, setSavedTarget] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(true);
+  const [targetText, setTargetText] = useState("Set your daily Calorie Target");
+
+  useEffect(() => {
+    // Load saved calorie target when component mounts
+    loadCalorieTarget();
+  }, []);
+
+  const loadCalorieTarget = async () => {
+    try {
+      const storedTarget = await AsyncStorage.getItem("calorieTarget");
+      if (storedTarget !== null) {
+        setSavedTarget(storedTarget);
+        setCalorieTarget(storedTarget); // Set calorieTarget in edit mode for editing
+        setTargetText("Your Daily Calorie Target"); // Change the text
+        setIsEditMode(false); // Toggle to view mode
+      }
+    } catch (error) {
+      console.error("Error loading calorie target:", error);
+    }
+  };
+
+  const handleSaveTarget = async () => {
+    try {
+      // Save the calorie target to asyncStorage
+      await AsyncStorage.setItem("calorieTarget", calorieTarget);
+      // Update saved target in state
+      setSavedTarget(calorieTarget);
+      // Toggle to view mode
+      setIsEditMode(false);
+      setTargetText("Your Daily Calorie Target"); // Change the text
+      // Navigate to CheckYourDailyGoal screen and pass calorie target
+      navigation.navigate("CheckYourDailyGoal", { calorieGoal: calorieTarget });
+    } catch (error) {
+      console.error("Error saving calorie target:", error);
+    }
+  };
+
+  const handleModifyTarget = () => {
+    // Toggle back to edit mode
+    setIsEditMode(true);
+    setTargetText("Set your daily Calorie Target"); // Change the text back to original
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Set Target</Text>
       <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Set your daily Calorie Target</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Please type your daily calorie target"
-          value={calorieTarget}
-          onChangeText={setCalorieTarget}
-          keyboardType="numeric"
-        />
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveTarget}>
-          <Text style={styles.saveButtonText}>Save</Text>
-        </TouchableOpacity>
+        <Text style={styles.inputLabel}>{targetText}</Text>
+        {isEditMode ? (
+          <TextInput
+            style={styles.input}
+            placeholder="Please type your daily calorie target"
+            value={calorieTarget}
+            onChangeText={setCalorieTarget}
+            keyboardType="numeric"
+          />
+        ) : (
+          <Text style={styles.savedText}>{savedTarget}</Text>
+        )}
+        {isEditMode ? (
+          <TouchableOpacity
+            style={styles.saveButton}
+            onPress={handleSaveTarget}
+          >
+            <Text style={styles.saveButtonText}>Save</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.modifyButton}
+            onPress={handleModifyTarget}
+          >
+            <Text style={styles.modifyButtonText}>Modify</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -44,11 +95,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#fff",
   },
-  header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 30,
-  },
+
   inputContainer: {
     width: "100%",
     backgroundColor: "#f0f0f0",
@@ -72,6 +119,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
   },
+  savedText: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
   saveButton: {
     backgroundColor: "pink",
     paddingVertical: 10,
@@ -80,6 +131,19 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   saveButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modifyButton: {
+    backgroundColor: "orange",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    width: "100%",
+  },
+  modifyButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",

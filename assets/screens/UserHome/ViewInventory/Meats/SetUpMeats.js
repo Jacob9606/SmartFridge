@@ -6,19 +6,22 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // React Navigation에서 useNavigation 가져오기
 
 const SetUpMeats = () => {
+  const navigation = useNavigation(); // 내비게이션 객체 가져오기
   const [isCritical, setIsCritical] = useState(null);
   const [quantity, setQuantity] = useState("");
 
-  const handleAddMeats = () => {
-    // Logic to add Meats with the specified critical status and quantity
+  const handleAddMeat = () => {
+    // Logic to add meats with the specified critical status and quantity
     console.log(
-      "Adding Meats with quantity:",
+      "Adding meats with quantity:",
       quantity,
       "Critical:",
       isCritical
     );
+    navigation.navigate("MeatsInventory"); // MeatsInventory로 이동
   };
 
   return (
@@ -47,17 +50,21 @@ const SetUpMeats = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.questionText}>Set Quantity for the alarm</Text>
-      <TextInput
-        style={styles.quantityInput}
-        placeholder="Type the quantity"
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
+      {isCritical && (
+        <>
+          <Text style={styles.questionText}>Set Quantity for the alarm</Text>
+          <TextInput
+            style={styles.quantityInput}
+            placeholder="Type the quantity"
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+        </>
+      )}
 
-      <TouchableOpacity style={styles.addMeatsButton} onPress={handleAddMeats}>
-        <Text style={styles.addMeatsButtonText}>Add Meats</Text>
+      <TouchableOpacity style={styles.addFruitsButton} onPress={handleAddMeat}>
+        <Text style={styles.addFruitsButtonText}>Add Meats</Text>
       </TouchableOpacity>
     </View>
   );
@@ -106,13 +113,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
   },
-  addMeatsButton: {
+  addFruitsButton: {
     backgroundColor: "pink",
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
   },
-  addMeatsButtonText: {
+  addFruitsButtonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 16,

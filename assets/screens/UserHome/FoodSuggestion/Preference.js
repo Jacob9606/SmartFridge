@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const preferences = [
   {
@@ -22,12 +23,31 @@ const preferences = [
   // ... add more preferences as needed
 ];
 
-const Preference = ({ navigation }) => {
+const Preference = () => {
+  const [selectedPreference, setSelectedPreference] = useState(null);
+  const navigation = useNavigation();
+
+  const handlePreferenceSelection = (id) => {
+    setSelectedPreference(id);
+  };
+
+  const handleNext = () => {
+    navigation.navigate("DietaryRestriction");
+  };
+
   const renderPreferenceItem = ({ item }) => (
-    <View style={styles.preferenceItem}>
-      <Image source={item.image} style={styles.preferenceImage} />
+    <TouchableOpacity
+      style={[
+        styles.preferenceItem,
+        selectedPreference === item.id && styles.selectedPreference,
+      ]}
+      onPress={() => handlePreferenceSelection(item.id)}
+    >
+      <View style={styles.imageContainer}>
+        <Image source={item.image} style={styles.preferenceImage} />
+      </View>
       <Text style={styles.preferenceTitle}>{item.title}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -41,12 +61,11 @@ const Preference = ({ navigation }) => {
         columnWrapperStyle={styles.columnWrapper}
       />
       <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          /* logic for adding a recipe */
-        }}
+        style={styles.nextButton}
+        onPress={handleNext}
+        disabled={!selectedPreference} // Disable the button if no preference is selected
       >
-        <Text style={styles.addButtonText}>Add Recipe</Text>
+        <Text style={styles.nextButtonText}>Next</Text>
       </TouchableOpacity>
     </View>
   );
@@ -76,10 +95,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
   },
+  imageContainer: {
+    borderRadius: 50,
+    overflow: "hidden",
+    marginBottom: 10,
+  },
   preferenceImage: {
     width: 100,
     height: 100,
-    marginBottom: 10,
   },
   preferenceTitle: {
     fontSize: 18,
@@ -88,15 +111,20 @@ const styles = StyleSheet.create({
   columnWrapper: {
     justifyContent: "space-between",
   },
-  addButton: {
+  selectedPreference: {
+    borderColor: "blue",
+    borderWidth: 2,
+  },
+  nextButton: {
     backgroundColor: "pink",
     padding: 15,
     borderRadius: 5,
-    position: "absolute", // Add Recipe button is positioned at the bottom of the screen
+    position: "absolute", // Next button is positioned at the bottom of the screen
     bottom: 20,
     width: "90%",
+    opacity: 0.7, // Dim the button when disabled
   },
-  addButtonText: {
+  nextButtonText: {
     textAlign: "center",
     color: "white",
     fontWeight: "bold",

@@ -6,24 +6,27 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native"; // React Navigation에서 useNavigation 가져오기
 
 const SetUpSauce = () => {
+  const navigation = useNavigation(); // 내비게이션 객체 가져오기
   const [isCritical, setIsCritical] = useState(null);
   const [quantity, setQuantity] = useState("");
 
   const handleAddSauce = () => {
-    // Logic to add Sauce with the specified critical status and quantity
+    // Logic to add sauces with the specified critical status and quantity
     console.log(
-      "Adding Sauce with quantity:",
+      "Adding sauces with quantity:",
       quantity,
       "Critical:",
       isCritical
     );
+    navigation.navigate("SauceInventory"); // SauceInventory로 이동
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Set Up Sauce</Text>
+      <Text style={styles.header}>Set Up Sauces</Text>
 
       <Text style={styles.questionText}>Is it Critical Item?</Text>
       <View style={styles.buttonContainer}>
@@ -47,17 +50,21 @@ const SetUpSauce = () => {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.questionText}>Set Quantity for the alarm</Text>
-      <TextInput
-        style={styles.quantityInput}
-        placeholder="Type the quantity"
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
-      />
+      {isCritical && (
+        <>
+          <Text style={styles.questionText}>Set Quantity for the alarm</Text>
+          <TextInput
+            style={styles.quantityInput}
+            placeholder="Type the quantity"
+            value={quantity}
+            onChangeText={setQuantity}
+            keyboardType="numeric"
+          />
+        </>
+      )}
 
-      <TouchableOpacity style={styles.addSauceButton} onPress={handleAddSauce}>
-        <Text style={styles.addSauceButtonText}>Add Sauce</Text>
+      <TouchableOpacity style={styles.addFruitsButton} onPress={handleAddSauce}>
+        <Text style={styles.addFruitsButtonText}>Add Sauces</Text>
       </TouchableOpacity>
     </View>
   );
@@ -106,13 +113,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 16,
   },
-  addSauceButton: {
+  addFruitsButton: {
     backgroundColor: "pink",
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
   },
-  addSauceButtonText: {
+  addFruitsButtonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 16,

@@ -8,8 +8,11 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddSauce = () => {
+  const navigation = useNavigation();
+
   const [sauceData, setSauceData] = useState({
     productName: "Ketchup",
     quantity: "1",
@@ -19,10 +22,10 @@ const AddSauce = () => {
   const [selectedIcon, setSelectedIcon] = useState("Ketchup");
 
   const icons = {
-    SoySauce: require("C:/Users/hp/SmartFridge/assets/images/soySauce.png"),
-    Ketchup: require("C:/Users/hp/SmartFridge/assets/images/ketchup.png"),
-    Mustard: require("C:/Users/hp/SmartFridge/assets/images/mustard.png"),
-    Others: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    SoySauce: require("../../../../images/soySauce.png"),
+    Ketchup: require("../../../../images/ketchup.png"),
+    Mustard: require("../../../../images/mustard.png"),
+    Others: require("../../../../images/others.png"),
   };
 
   const handleIconSelect = (iconName) => {
@@ -30,14 +33,13 @@ const AddSauce = () => {
   };
 
   const handleAddSauces = () => {
-    // 소스 추가 로직 처리
     console.log("Added Sauces:", sauceData, "Selected Icon:", selectedIcon);
+    navigation.navigate("SetUpSauce"); // SetUpAlarm으로 이동
   };
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Add Sauces</Text>
-
       <TextInput
         style={styles.input}
         onChangeText={(text) =>
@@ -68,7 +70,6 @@ const AddSauce = () => {
         placeholder="Calories"
         keyboardType="number-pad"
       />
-
       <Text style={styles.label}>Choose Icon</Text>
       <View style={styles.iconsContainer}>
         {Object.keys(icons).map((iconName) => (
@@ -85,10 +86,10 @@ const AddSauce = () => {
           </TouchableOpacity>
         ))}
       </View>
-
       <TouchableOpacity style={styles.button} onPress={handleAddSauces}>
         <Text style={styles.buttonText}>Add Sauces</Text>
       </TouchableOpacity>
+      <View style={{ height: 60 }} />
     </ScrollView>
   );
 };
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 0,
   },
   buttonText: {
     color: "white",

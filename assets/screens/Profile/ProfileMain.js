@@ -1,65 +1,152 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
   StyleSheet,
+  View,
   Image,
+  Text,
+  ScrollView,
   TouchableOpacity,
-  FlatList,
+  Alert,
 } from "react-native";
-
-const profiles = [
-  { id: "1", name: "Profile1" },
-  { id: "2", name: "Profile2" },
-  { id: "3", name: "Profile3" },
-  { id: "4", name: "Profile4" },
-  // Add more profiles as needed
-];
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { getEmail, storeProfileId } from "../clientStorage";
+import { BASE_URL } from "../../../config";
 
 const ProfileMain = () => {
-  const renderProfile = ({ item }) => (
-    <View style={styles.profileContainer}>
-      <Image
-        style={styles.profileImage}
-        source={{ uri: "https://via.placeholder.com/150" }} // Placeholder image source
-      />
-      <Text style={styles.profileName}>{item.name}</Text>
-    </View>
+  const navigation = useNavigation();
+  const [profiles, setProfiles] = useState([]);
+
+  // 프로필 데이터를 가져오는 함수
+  const fetchProfiles = async () => {
+    try {
+      const email = await getEmail();
+      const response = await fetch(BASE_URL + `/profiles/owner/${email}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setProfiles(data);
+    } catch (error) {
+      console.error("프로필을 가져오는 중 오류 발생:", error);
+    }
+  };
+
+  // 프로필 삭제 함수
+  const deleteProfile = async (profileId) => {
+    try {
+      const response = await fetch(BASE_URL + `/profiles/delete/${profileId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      // 프로필 삭제 후 다시 데이터 가져오기
+      fetchProfiles();
+    } catch (error) {
+      console.error("프로필 삭제 중 오류 발생:", error);
+    }
+  };
+
+  // 삭제 확인 대화상자 표시 함수
+  const confirmDeleteProfile = (profileId) => {
+    Alert.alert(
+      "프로필 삭제",
+      "이 프로필을 삭제하시겠습니까?",
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "삭제",
+          onPress: () => deleteProfile(profileId),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  // 화면이 포커스를 받을 때 프로필 데이터를 가져옴
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchProfiles();
+    }, [])
   );
 
+  // AddProfile 화면으로 이동하는 함수
+  const handleAddProfilePress = () => {
+    if (profiles.length < 4) {
+      navigation.navigate("AddProfile");
+    } else {
+      alert("프로필은 최대 4개까지 생성할 수 있습니다.");
+    }
+  };
+
+  const testAlarm = () => {
+    navigation.navigate("TestAlarm");
+  };
+
+  // Profile1Home 화면으로 이동하고 profileId를 저장하는 함수
+  const handleProfilePress = async (profileId) => {
+    await storeProfileId(profileId);
+    navigation.navigate("Profile1Home");
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Profile</Text>
-        <TouchableOpacity
-          onPress={() => {
-            /* handle add profile */
-          }}
-        >
-          <Text style={styles.addIcon}>+</Text>
-        </TouchableOpacity>
+        {profiles.length < 4 && (
+          <TouchableOpacity onPress={handleAddProfilePress}>
+            <Text style={styles.addIcon}>+</Text>
+          </TouchableOpacity>
+        )}
       </View>
-      <FlatList
-        data={profiles}
-        renderItem={renderProfile}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-      />
-    </View>
+      <View style={styles.profileContainer}>
+        {profiles?.map((profile, index) => (
+          <View key={index} style={styles.profileItemContainer}>
+            <TouchableOpacity
+              onPress={() => handleProfilePress(profile.profileId)}
+            >
+              <View style={styles.profileItem}>
+                <Image
+                  source={require("../../../assets/images/smile.png")}
+                  style={styles.profileImage}
+                />
+                <Text style={styles.profileName}>{profile.name}</Text>
+                <Text style={styles.profileId}>{profile.profileId}</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => confirmDeleteProfile(profile.profileId)}
+            >
+              <Text style={styles.deleteButtonText}>삭제</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.deleteButtonText}
+              onPress={testAlarm}
+            >
+              <Text style={styles}>Set Alarms</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 44, // Adjust this value based on your status bar + nav bar height
+    backgroundColor: "#fff",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 16,
+    padding: 20,
   },
   headerTitle: {
     fontSize: 24,
@@ -69,25 +156,41 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  row: {
-    flex: 1,
-    justifyContent: "space-around",
-    marginVertical: 8,
-  },
   profileContainer: {
-    justifyContent: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    padding: 20,
+  },
+  profileItemContainer: {
     alignItems: "center",
-    margin: 8,
+    margin: 10,
+  },
+  profileItem: {
+    alignItems: "center",
   },
   profileImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: "#000", // Placeholder background
-    marginBottom: 8,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   profileName: {
-    fontSize: 16,
+    marginTop: 8,
+  },
+  profileId: {
+    marginTop: 4,
+    color: "#888",
+  },
+  deleteButton: {
+    marginTop: 5,
+    backgroundColor: "#ff4d4d",
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
   },
 });
 

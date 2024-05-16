@@ -8,13 +8,16 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddFruits = () => {
+  const navigation = useNavigation();
+
   const [fruitData, setFruitData] = useState({
-    productName: "Pear",
-    quantity: "3",
-    expiryDate: "07/04/2024",
-    calories: "351",
+    name: "",
+    quantity: "",
+    expiryDate: "",
+    calories: "",
   });
   const [selectedIcon, setSelectedIcon] = useState(null);
 
@@ -63,20 +66,31 @@ const AddFruits = () => {
   };
 
   const handleSubmit = () => {
+    // Check if all fields are filled
+    // if (
+    //   !fruitData.name ||
+    //   !fruitData.quantity ||
+    //   !fruitData.expiryDate ||
+    //   !fruitData.calories ||
+    //   !selectedIcon
+    // ) {
+    //   alert("Please fill in all fields.");
+    //   return;
+    // }
+
     // Handle the submission of the fruit data
     console.log("Fruit Data:", fruitData, "Selected Icon:", selectedIcon);
+    navigation.navigate("SetUpFruits", { fruitData, selectedIcon }); // Navigation Params를 사용하여 데이터 전달
   };
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.header}>Add Fruits</Text>
+      <Text style={styles.header}>Add Items</Text>
       <TextInput
         style={styles.input}
         placeholder="Product Name"
-        value={fruitData.productName}
-        onChangeText={(text) =>
-          setFruitData({ ...fruitData, productName: text })
-        }
+        value={fruitData.name}
+        onChangeText={(text) => setFruitData({ ...fruitData, name: text })}
       />
       <TextInput
         style={styles.input}
@@ -122,6 +136,7 @@ const AddFruits = () => {
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Next</Text>
       </TouchableOpacity>
+      <View style={{ height: 60 }} />
     </ScrollView>
   );
 };
@@ -152,20 +167,22 @@ const styles = StyleSheet.create({
   iconsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around",
+    justifyContent: "space-between", // 아이콘을 3개씩 나열하고 간격을 동일하게 배치
+    paddingHorizontal: 10, // 양쪽 여백 추가
     marginBottom: 20,
   },
   iconWrapper: {
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20, // 마진 삭제하고 여백 추가
+    width: "30%", // 아이콘 컨테이너의 너비 조정하여 3개씩 배치
   },
   iconImage: {
     width: 60,
     height: 60,
   },
-  selectedIcon: {
+  picture: {
     borderWidth: 2,
-    borderColor: "blue", // Adjust color as needed
+    borderColor: "blue", // 선택된 아이콘의 테두리 색상
     borderRadius: 30,
   },
   iconText: {
@@ -177,7 +194,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: -10,
   },
   buttonText: {
     color: "white",

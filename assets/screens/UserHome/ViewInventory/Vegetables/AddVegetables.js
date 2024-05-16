@@ -8,8 +8,11 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddVegetables = () => {
+  const navigation = useNavigation();
+
   const [vegetableData, setVegetableData] = useState({
     productName: "Mushroom",
     quantity: "2",
@@ -18,17 +21,16 @@ const AddVegetables = () => {
   });
   const [selectedIcon, setSelectedIcon] = useState("Mushroom");
 
-  // 예시 아이콘들, 실제 앱에서 사용하시는 이미지 경로로 교체해주세요.
   const icons = {
-    Cabbage: require("C:/Users/hp/SmartFridge/assets/images/cabbage.png"),
-    Carrot: require("C:/Users/hp/SmartFridge/assets/images/carrot.png"),
-    Tomato: require("C:/Users/hp/SmartFridge/assets/images/tomato.png"),
-    Onion: require("C:/Users/hp/SmartFridge/assets/images/onion.png"),
-    BokChoy: require("C:/Users/hp/SmartFridge/assets/images/bokChoy.png"),
-    RedChili: require("C:/Users/hp/SmartFridge/assets/images/chili.png"),
-    Mushroom: require("C:/Users/hp/SmartFridge/assets/images/mushroom.png"),
-    Garlic: require("C:/Users/hp/SmartFridge/assets/images/garlic.png"),
-    Others: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    Cabbage: require("../../../../images/cabbage.png"),
+    Carrot: require("../../../../images/carrot.png"),
+    Tomato: require("../../../../images/tomato.png"),
+    Onion: require("../../../../images/onion.png"),
+    BokChoy: require("../../../../images/bokChoy.png"),
+    RedChili: require("../../../../images/chili.png"),
+    Mushroom: require("../../../../images/mushroom.png"),
+    Garlic: require("../../../../images/garlic.png"),
+    Others: require("../../../../images/others.png"),
   };
 
   const handleIconSelect = (iconName) => {
@@ -36,13 +38,13 @@ const AddVegetables = () => {
   };
 
   const handleAddVegetables = () => {
-    // 채소 추가 로직 처리
     console.log(
       "Added Vegetables:",
       vegetableData,
       "Selected Icon:",
       selectedIcon
     );
+    navigation.navigate("SetUpVegetables"); // SetUpFruits 컴포넌트로 이동
   };
 
   return (
@@ -104,6 +106,7 @@ const AddVegetables = () => {
       <TouchableOpacity style={styles.button} onPress={handleAddVegetables}>
         <Text style={styles.buttonText}>Add Vegetables</Text>
       </TouchableOpacity>
+      <View style={{ height: 60 }} />
     </ScrollView>
   );
 };
@@ -140,10 +143,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   icon: {
-    padding: 10,
-    margin: 5,
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 10,
+    width: 100,
   },
   iconImage: {
     width: 60,
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
   },
   selectedIcon: {
     borderWidth: 2,
-    borderColor: "#ff0000", // 선택되었을 때 보여질 테두리 색상
+    borderColor: "#ff0000",
     borderRadius: 30,
   },
   button: {
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: -10,
   },
   buttonText: {
     color: "white",

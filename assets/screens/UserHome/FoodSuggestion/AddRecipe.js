@@ -7,15 +7,19 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddRecipe = () => {
   const [foodName, setFoodName] = useState("");
   const [instructions, setInstructions] = useState("");
+  const navigation = useNavigation();
 
   const submitRecipe = () => {
     // Logic for what happens when you press "Add Recipe" goes here.
     // Typically this would involve validating the input and then saving the recipe to a database or state.
     console.log("Recipe submitted:", { foodName, instructions });
+    // Navigate back to Suggestion screen after submitting recipe
+    navigation.navigate("Suggestion");
   };
 
   return (

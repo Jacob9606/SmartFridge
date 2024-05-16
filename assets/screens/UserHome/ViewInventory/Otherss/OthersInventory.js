@@ -2,59 +2,88 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   FlatList,
   Image,
+  TextInput,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const othersData = [
   {
     id: "1",
     name: "Kimchi",
     kcal: "250 Kcal",
-    quantity: 2,
-    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    quantity: 3,
+    expiryDate: "01/04",
   },
   {
     id: "2",
     name: "Seafood",
     kcal: "250 Kcal",
-    quantity: 4,
-    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    quantity: 2,
+    expiryDate: "01/04",
   },
   {
     id: "3",
     name: "Bibimbap",
-    kcal: "800 Kcal",
-    quantity: 2,
-    image: require("C:/Users/hp/SmartFridge/assets/images/others.png"),
+    kcal: "250 Kcal",
+    quantity: 3,
+    expiryDate: "01/04",
   },
-  // Add more items as needed
+  // Add more others here
 ];
 
 const OthersInventory = () => {
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
 
   const renderOtherItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
-      <Text style={styles.itemName}>{item.name}</Text>
-      <Text style={styles.itemKcal}>{item.kcal}</Text>
-      <Text style={styles.itemQuantity}>{item.quantity}</Text>
+    <View style={styles.otherItem}>
+      {item.name === "Kimchi" && (
+        <Image
+          source={require("../../../../images/others.png")}
+          style={styles.otherImage}
+        />
+      )}
+      {item.name === "Seafood" && (
+        <Image
+          source={require("../../../../images/others.png")}
+          style={styles.otherImage}
+        />
+      )}
+      {item.name === "Bibimbap" && (
+        <Image
+          source={require("../../../../images/others.png")}
+          style={styles.otherImage}
+        />
+      )}
+      <View style={styles.otherDetails}>
+        <Text style={styles.otherName}>{item.name}</Text>
+        <Text style={styles.otherInfo}>{item.kcal}</Text>
+        <Text style={styles.otherInfo}>Expired date: {item.expiryDate}</Text>
+      </View>
+      <Text style={styles.quantity}>{item.quantity}</Text>
       <TouchableOpacity
         onPress={() => {
-          /* Logic to like the item */
+          /* Logic to mark as bought */
         }}
       >
-        <Text style={styles.likeIcon}>❤️</Text>
+        <Text>✓</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          /* Logic to delete item */
+        }}
+      >
+        <Text>🗑</Text>
       </TouchableOpacity>
     </View>
   );
 
-  const addOtherItem = () => {
-    // Logic to add a new item to the inventory
+  const addOther = () => {
+    navigation.navigate("AddOthers");
   };
 
   return (
@@ -67,14 +96,12 @@ const OthersInventory = () => {
         placeholder="Search"
       />
       <FlatList
-        data={othersData.filter((item) =>
-          item.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )}
+        data={othersData}
         renderItem={renderOtherItem}
         keyExtractor={(item) => item.id}
       />
-      <TouchableOpacity style={styles.addButton} onPress={addOtherItem}>
-        <Text style={styles.addButtonText}>Add Others</Text>
+      <TouchableOpacity style={styles.addButton} onPress={addOther}>
+        <Text style={styles.addButtonText}>Add Other</Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,7 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   searchBox: {
     height: 40,
@@ -99,37 +126,36 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingLeft: 10,
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  itemContainer: {
+  otherItem: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f9f9f9",
     borderRadius: 10,
     padding: 10,
-    marginHorizontal: 20,
-    marginBottom: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
-  itemImage: {
+  otherImage: {
     width: 50,
     height: 50,
     borderRadius: 25,
   },
-  itemName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    flex: 1,
+  otherDetails: {
     marginLeft: 10,
+    flex: 1,
   },
-  itemKcal: {
+  otherName: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  otherInfo: {
     fontSize: 16,
   },
-  itemQuantity: {
-    fontSize: 16,
+  quantity: {
     marginRight: 10,
-  },
-  likeIcon: {
-    fontSize: 24,
+    fontSize: 18,
   },
   addButton: {
     backgroundColor: "pink",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,52 +8,51 @@ import {
   Image,
   TextInput,
 } from "react-native";
-
-const fruitsData = [
-  {
-    id: "1",
-    name: "apple",
-    kcal: "250 Kcal",
-    quantity: 3,
-    expiryDate: "01/04",
-  },
-  {
-    id: "2",
-    name: "strawberry",
-    kcal: "250 Kcal",
-    quantity: 2,
-    expiryDate: "01/04",
-  },
-  {
-    id: "3",
-    name: "lemon",
-    kcal: "250 Kcal",
-    quantity: 3,
-    expiryDate: "01/04",
-  },
-  // Add more fruits here
-];
+import { useNavigation } from "@react-navigation/native";
+import { getEmail } from "../../../clientStorage";
+import { BASE_URL } from "../../../../../config";
 
 const FruitsInventory = () => {
+  const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [fruitsData, setFruitsData] = useState([]); // Moved state declaration here
+
+  useEffect(() => {
+    fetchFruitsData();
+  }, []);
+
+  const fetchFruitsData = async () => {
+    try {
+      const emailId = await getEmail();
+      console.log(BASE_URL + `/users/${emailId}/inventory`);
+      const response = await fetch(BASE_URL + `/users/${emailId}/inventory`);
+      if (!response.ok) {
+        throw new Error("Fetching profile was not ok");
+      }
+      const data = await response.json();
+      setFruitsData(data); // Set fruitsData state here
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
   const renderFruitItem = ({ item }) => (
     <View style={styles.fruitItem}>
       {item.name === "apple" && (
         <Image
-          source={require("C:/Users/hp/SmartFridge/assets/images/apple.png")}
+          source={require("../../../../images/apple.png")}
           style={styles.fruitImage}
         />
       )}
       {item.name === "lemon" && (
         <Image
-          source={require("C:/Users/hp/SmartFridge/assets/images/lemon.png")}
+          source={require("../../../../images/lemon.png")}
           style={styles.fruitImage}
         />
       )}
       {item.name === "strawberry" && (
         <Image
-          source={require("C:/Users/hp/SmartFridge/assets/images/strawberry.png")}
+          source={require("../../../../images/strawberry.png")}
           style={styles.fruitImage}
         />
       )}
@@ -81,12 +80,12 @@ const FruitsInventory = () => {
   );
 
   const addFruit = () => {
-    // Logic to add a new fruit to the inventory
+    navigation.navigate("AddFruits");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Fruits Inventory</Text>
+      <Text style={styles.header}>Fridge Inventory</Text>
       <TextInput
         style={styles.searchBox}
         value={searchQuery}
@@ -96,10 +95,11 @@ const FruitsInventory = () => {
       <FlatList
         data={fruitsData}
         renderItem={renderFruitItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()} // Use index as key
       />
+
       <TouchableOpacity style={styles.addButton} onPress={addFruit}>
-        <Text style={styles.addButtonText}>Add Fruits</Text>
+        <Text style={styles.addButtonText}>Add Items</Text>
       </TouchableOpacity>
     </View>
   );

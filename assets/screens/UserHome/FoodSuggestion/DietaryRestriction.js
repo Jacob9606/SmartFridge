@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const dietaryOptions = [
   { id: "milk", name: "milk", image: require("../../../images/milk.png") },
@@ -33,6 +34,7 @@ const dietaryOptions = [
 
 const DietaryRestriction = () => {
   const [selectedRestrictions, setSelectedRestrictions] = useState(new Set());
+  const navigation = useNavigation();
 
   const toggleRestriction = (id) => {
     const newRestrictions = new Set(selectedRestrictions);
@@ -47,38 +49,66 @@ const DietaryRestriction = () => {
   const setDietaryRestrictions = () => {
     // Here, you would handle saving the restrictions to your state or backend
     console.log("Selected restrictions:", Array.from(selectedRestrictions));
+    // Navigate to CustomizedSuggestion screen after setting dietary restrictions
+    navigation.navigate("CustomizedSuggestion");
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Dietary restriction</Text>
-      <View style={styles.restrictionsContainer}>
-        {dietaryOptions.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[
-              styles.restrictionItem,
-              selectedRestrictions.has(item.id) &&
-                styles.selectedRestrictionItem,
-            ]}
-            onPress={() => toggleRestriction(item.id)}
-          >
-            <Image source={item.image} style={styles.icon} />
-            <Text style={styles.restrictionName}>{item.name}</Text>
-          </TouchableOpacity>
-        ))}
+    <View style={styles.container}>
+      <ScrollView>
+        <Text style={styles.header}>Dietary restriction</Text>
+        <View style={styles.restrictionsContainer}>
+          {dietaryOptions.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[
+                styles.restrictionItem,
+                selectedRestrictions.has(item.id) &&
+                  styles.selectedRestrictionItem,
+              ]}
+              onPress={() => toggleRestriction(item.id)}
+            >
+              <Image source={item.image} style={styles.icon} />
+              <Text style={styles.restrictionName}>{item.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={setDietaryRestrictions}
+        >
+          <Text style={styles.buttonText}>Set Dietary restriction</Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <View style={styles.menuBar}>
+        <TouchableOpacity onPress={() => console.log("Search button pressed")}>
+          <Image
+            source={require("../../../images/search.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log("Smart Fridge Home button pressed")}
+        >
+          <Image
+            source={require("../../../images/SmartFridgeHomeButton.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Heart button pressed")}>
+          <Image
+            source={require("../../../images/heart.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={setDietaryRestrictions}>
-        <Text style={styles.buttonText}>Set Dietary restriction</Text>
-      </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
   },
   header: {
     fontSize: 24,
@@ -121,6 +151,17 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  menuBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  menuIcon: {
+    width: 30,
+    height: 30,
   },
 });
 

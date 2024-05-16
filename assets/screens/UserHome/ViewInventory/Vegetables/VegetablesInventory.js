@@ -3,64 +3,107 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
+  FlatList,
+  Image,
+  TextInput,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const SetUpVegetables = () => {
-  const [isCritical, setIsCritical] = useState(null);
-  const [quantity, setQuantity] = useState("");
+const vegetablesData = [
+  {
+    id: "1",
+    name: "Carrots",
+    kcal: "250 Kcal",
+    quantity: 3,
+    expiryDate: "01/04",
+  },
+  {
+    id: "2",
+    name: "Tomato",
+    kcal: "250 Kcal",
+    quantity: 2,
+    expiryDate: "01/04",
+  },
+  {
+    id: "3",
+    name: "Cabbage",
+    kcal: "250 Kcal",
+    quantity: 3,
+    expiryDate: "01/04",
+  },
+  // Add more vegetables here
+];
 
-  const handleAddVegetables = () => {
-    // Logic to add Vegetables with the specified critical status and quantity
-    console.log(
-      "Adding Vegetables with quantity:",
-      quantity,
-      "Critical:",
-      isCritical
-    );
+const VegetablesInventory = () => {
+  const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const renderVegetableItem = ({ item }) => (
+    <View style={styles.vegetableItem}>
+      {item.name === "Carrots" && (
+        <Image
+          source={require("../../../../images/carrot.png")}
+          style={styles.vegetableImage}
+        />
+      )}
+      {item.name === "Tomato" && (
+        <Image
+          source={require("../../../../images/tomato.png")}
+          style={styles.vegetableImage}
+        />
+      )}
+      {item.name === "Cabbage" && (
+        <Image
+          source={require("../../../../images/cabbage.png")}
+          style={styles.vegetableImage}
+        />
+      )}
+      <View style={styles.vegetableDetails}>
+        <Text style={styles.vegetableName}>{item.name}</Text>
+        <Text style={styles.vegetableInfo}>{item.kcal}</Text>
+        <Text style={styles.vegetableInfo}>
+          Expired date: {item.expiryDate}
+        </Text>
+      </View>
+      <Text style={styles.quantity}>{item.quantity}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          /* Logic to mark as bought */
+        }}
+      >
+        <Text>✓</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          /* Logic to delete item */
+        }}
+      >
+        <Text>🗑</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  const addVegetables = () => {
+    navigation.navigate("AddVegetables");
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Set Up Vegetables</Text>
-
-      <Text style={styles.questionText}>Is it Critical Item?</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.choiceButton,
-            isCritical === true && styles.selectedButton,
-          ]}
-          onPress={() => setIsCritical(true)}
-        >
-          <Text style={styles.buttonText}>Yes</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.choiceButton,
-            isCritical === false && styles.selectedButton,
-          ]}
-          onPress={() => setIsCritical(false)}
-        >
-          <Text style={styles.buttonText}>No</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.questionText}>Set Quantity for the alarm</Text>
+      <Text style={styles.header}>Vegetables Inventory</Text>
       <TextInput
-        style={styles.quantityInput}
-        placeholder="Type the quantity"
-        value={quantity}
-        onChangeText={setQuantity}
-        keyboardType="numeric"
+        style={styles.searchBox}
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+        placeholder="Search"
       />
-
-      <TouchableOpacity
-        style={styles.addVegetablesButton}
-        onPress={handleAddVegetables}
-      >
-        <Text style={styles.addVegetablesButtonText}>Add Vegetables</Text>
+      <FlatList
+        data={vegetablesData}
+        renderItem={renderVegetableItem}
+        keyExtractor={(item) => item.id}
+      />
+      <TouchableOpacity style={styles.addButton} onPress={addVegetables}>
+        <Text style={styles.addButtonText}>Add Vegetables</Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,57 +112,65 @@ const SetUpVegetables = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    paddingTop: 20,
     backgroundColor: "#fff",
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 30,
-  },
-  questionText: {
-    fontSize: 18,
-    fontWeight: "bold",
     marginBottom: 10,
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-  },
-  choiceButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    borderRadius: 20,
-    backgroundColor: "#f0f0f0",
-  },
-  selectedButton: {
-    backgroundColor: "#c2f0c2", // Or any color to indicate selection
-  },
-  buttonText: {
-    color: "#000",
-    fontSize: 16,
-  },
-  quantityInput: {
-    borderColor: "grey",
+  searchBox: {
+    height: 40,
+    borderColor: "gray",
     borderWidth: 1,
+    borderRadius: 10,
+    paddingLeft: 10,
+    marginHorizontal: 20,
+    marginBottom: 10,
+  },
+  vegetableItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
+    borderRadius: 10,
     padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  vegetableImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  vegetableDetails: {
+    marginLeft: 10,
+    flex: 1,
+  },
+  vegetableName: {
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+  vegetableInfo: {
     fontSize: 16,
   },
-  addVegetablesButton: {
+  quantity: {
+    marginRight: 10,
+    fontSize: 18,
+  },
+  addButton: {
     backgroundColor: "pink",
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
+    margin: 20,
   },
-  addVegetablesButtonText: {
+  addButtonText: {
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
   },
 });
 
-export default SetUpVegetables;
+export default VegetablesInventory;

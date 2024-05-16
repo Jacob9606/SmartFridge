@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-const CheckYourDailyGoal = () => {
+const CheckYourDailyGoal = ({ route }) => {
+  const { calorieGoal } = route.params;
   // These values would normally come from your app's state or a backend
-  const calorieGoal = 1800;
+
   const caloriesConsumed = 1200;
   const caloriesLeft = calorieGoal - caloriesConsumed;
 

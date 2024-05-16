@@ -1,72 +1,133 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   FlatList,
+  StyleSheet,
   Image,
   TouchableOpacity,
-  StyleSheet,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const foodSuggestions = [
+// Import images
+import searchImage from "../../../images/search.png";
+import SmartFridgeHomeButtonImage from "../../../images/SmartFridgeHomeButton.png";
+import heartImage from "../../../images/heart.png";
+
+const initialFoodSuggestions = [
   {
     id: "1",
     name: "Korean Chicken",
     kcal: "250 Kcal",
     image: require("../../../images/koreanChicken.png"),
+    liked: false,
   },
   {
     id: "2",
     name: "Salad",
     kcal: "250 Kcal",
     image: require("../../../images/salad.png"),
+    liked: false,
   },
   {
     id: "3",
     name: "Sushi",
     kcal: "250 Kcal",
     image: require("../../../images/sushi.png"),
+    liked: false,
   },
   {
     id: "4",
     name: "Dumplings",
     kcal: "250 Kcal",
     image: require("../../../images/dumplings.png"),
+    liked: false,
   },
-  // Add more suggestions as needed
+  // ... 여기에 더 많은 음식 아이템을 추가할 수 있습니다.
 ];
 
 const Suggestion = () => {
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
-      <View style={styles.itemInfo}>
-        <Text style={styles.itemCalories}>{item.kcal}</Text>
-        <Text style={styles.itemName}>{item.name}</Text>
+  const [foodSuggestions, setFoodSuggestions] = useState(
+    initialFoodSuggestions
+  );
+  const navigation = useNavigation();
+
+  const toggleLike = (id) => {
+    setFoodSuggestions((current) =>
+      current.map((food) =>
+        food.id === id ? { ...food, liked: !food.liked } : food
+      )
+    );
+  };
+
+  const removeSuggestion = (id) => {
+    setFoodSuggestions((current) => current.filter((food) => food.id !== id));
+  };
+
+  const handlePressRecipe = (name) => {
+    // 예시: KoreanChickenRecipe 화면으로 이동
+    navigation.navigate("KoreanChickenRecipe");
+  };
+
+  const handlePressCustomize = () => {
+    navigation.navigate("Preference");
+  };
+
+  const handlePressAddRecipe = () => {
+    navigation.navigate("AddRecipe");
+  };
+
+  const renderFoodItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handlePressRecipe(item.name)}>
+      <View style={styles.foodItem}>
+        <View style={styles.foodInfo}>
+          <Image style={styles.foodImage} source={item.image} />
+          <View>
+            <Text style={styles.foodName}>{item.name}</Text>
+            <Text>{item.kcal}</Text>
+          </View>
+        </View>
+        <View style={styles.actions}>
+          <TouchableOpacity onPress={() => toggleLike(item.id)}>
+            <AntDesign
+              name={item.liked ? "heart" : "hearto"}
+              size={24}
+              color="red"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => removeSuggestion(item.id)}>
+            <AntDesign name="close" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
-      <TouchableOpacity style={styles.likeButton}>
-        <Text>❤️</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.deleteButton}>
-        <Text>✕</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Food Suggestion</Text>
       <FlatList
         data={foodSuggestions}
-        renderItem={renderItem}
+        renderItem={renderFoodItem}
         keyExtractor={(item) => item.id}
       />
-      <TouchableOpacity style={styles.customizeButton}>
+      <TouchableOpacity style={styles.button} onPress={handlePressCustomize}>
         <Text style={styles.buttonText}>Customize Meal Plans</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.button} onPress={handlePressAddRecipe}>
         <Text style={styles.buttonText}>Add Recipe</Text>
       </TouchableOpacity>
+      <View style={styles.bottomBar}>
+        <TouchableOpacity>
+          <Image source={searchImage} style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={SmartFridgeHomeButtonImage} style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Image source={heartImage} style={styles.icon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -74,64 +135,53 @@ const Suggestion = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 44,
-    backgroundColor: "#fff",
+    paddingTop: 50, // Adjust the padding as needed
+  },
+  foodItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
-    justifyContent: "flex-start",
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eaeaea",
   },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 20,
-  },
-  itemContainer: {
+  foodInfo: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 8,
-    padding: 16,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
   },
-  itemImage: {
+  foodImage: {
     width: 50,
     height: 50,
+    marginRight: 10,
     borderRadius: 25,
-    marginRight: 10,
   },
-  itemInfo: {
-    flex: 1,
-  },
-  itemCalories: {
-    fontSize: 16,
-  },
-  itemName: {
+  foodName: {
     fontWeight: "bold",
-    fontSize: 18,
   },
-  likeButton: {
-    marginRight: 10,
+  actions: {
+    flexDirection: "row",
   },
-  deleteButton: {
-    marginRight: 10,
+  bottomBar: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingVertical: 10,
   },
-  customizeButton: {
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  button: {
     backgroundColor: "pink",
     padding: 15,
-    borderRadius: 5,
-    marginVertical: 10,
-    width: "90%",
-    alignItems: "center",
-  },
-  addButton: {
-    backgroundColor: "pink",
-    padding: 15,
-    borderRadius: 5,
-    width: "90%",
-    alignItems: "center",
+    marginHorizontal: 10,
+    marginBottom: 10, // Move the button slightly up
+    borderRadius: 25,
   },
   buttonText: {
     color: "white",
-    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

@@ -8,8 +8,12 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const AddDrinks = () => {
+  const navigation = useNavigation();
+
+  // 초기 Drink 데이터 및 선택된 아이콘을 관리하는 상태
   const [drinkData, setDrinkData] = useState({
     productName: "Water",
     quantity: "1",
@@ -18,25 +22,30 @@ const AddDrinks = () => {
   });
   const [selectedIcon, setSelectedIcon] = useState("Water");
 
+  // 아이콘 이미지 및 이름 정의
   const icons = {
-    Juice: require("C:/Users/hp/SmartFridge/assets/images/juice.png"),
-    Soda: require("C:/Users/hp/SmartFridge/assets/images/coke.png"),
-    Milk: require("C:/Users/hp/SmartFridge/assets/images/milk.png"),
-    Others: require("C:/Users/hp/SmartFridge/assets/images/othersDrinks.png"),
+    Juice: require("../../../../images/juice.png"),
+    Soda: require("../../../../images/coke.png"),
+    Milk: require("../../../../images/milk.png"),
+    Others: require("../../../../images/othersDrinks.png"),
   };
 
+  // 선택된 아이콘을 업데이트하는 함수
   const handleIconSelect = (iconName) => {
     setSelectedIcon(iconName);
   };
 
+  // 쇼핑 항목 추가 버튼을 눌렀을 때 호출되는 함수
   const handleAddDrinks = () => {
     console.log("Added Drinks:", drinkData, "Selected Icon:", selectedIcon);
+    navigation.navigate("SetUpDrinks"); // SetUpDrinks 컴포넌트로 이동
   };
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Add Drinks</Text>
 
+      {/* 상품명 입력란 */}
       <TextInput
         style={styles.input}
         onChangeText={(text) =>
@@ -45,6 +54,7 @@ const AddDrinks = () => {
         value={drinkData.productName}
         placeholder="Product Name"
       />
+      {/* 수량 입력란 */}
       <TextInput
         style={styles.input}
         onChangeText={(text) => setDrinkData({ ...drinkData, quantity: text })}
@@ -52,6 +62,7 @@ const AddDrinks = () => {
         placeholder="Quantity"
         keyboardType="number-pad"
       />
+      {/* 유통 기한 입력란 */}
       <TextInput
         style={styles.input}
         onChangeText={(text) =>
@@ -60,6 +71,7 @@ const AddDrinks = () => {
         value={drinkData.expiryDate}
         placeholder="Expired date"
       />
+      {/* 칼로리 입력란 */}
       <TextInput
         style={styles.input}
         onChangeText={(text) => setDrinkData({ ...drinkData, calories: text })}
@@ -68,8 +80,10 @@ const AddDrinks = () => {
         keyboardType="number-pad"
       />
 
+      {/* 아이콘 선택 섹션 */}
       <Text style={styles.label}>Choose Icon</Text>
       <View style={styles.iconsContainer}>
+        {/* 아이콘 목록 렌더링 */}
         {Object.keys(icons).map((iconName) => (
           <TouchableOpacity
             key={iconName}
@@ -85,8 +99,9 @@ const AddDrinks = () => {
         ))}
       </View>
 
+      {/* 쇼핑 항목 추가 버튼 */}
       <TouchableOpacity style={styles.button} onPress={handleAddDrinks}>
-        <Text style={styles.buttonText}>Add Drinks</Text>
+        <Text style={styles.buttonText}>Set Up Drinks</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -124,10 +139,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   icon: {
-    padding: 10,
-    margin: 5,
     alignItems: "center",
-    justifyContent: "center",
+    marginBottom: 10,
+    width: 100,
   },
   iconImage: {
     width: 60,
@@ -148,7 +162,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
-    marginTop: 20,
+    marginTop: -10,
   },
   buttonText: {
     color: "white",

@@ -68,6 +68,28 @@ const CustomizedSuggestion = () => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
+      <View style={styles.menuBar}>
+        <TouchableOpacity onPress={() => console.log("Search button pressed")}>
+          <Image
+            source={require("../../../images/search.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log("Smart Fridge Home button pressed")}
+        >
+          <Image
+            source={require("../../../images/SmartFridgeHomeButton.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => console.log("Heart button pressed")}>
+          <Image
+            source={require("../../../images/heart.png")}
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -117,6 +139,17 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     fontSize: 24,
+  },
+  menuBar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  menuIcon: {
+    width: 30,
+    height: 30,
   },
 });
 

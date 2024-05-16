@@ -3,18 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 
 const TrackYourHealthMain = ({ navigation }) => {
   const setTarget = () => {
-    // Handle the "Set Target" action here
+    navigation.navigate("SetTarget");
   };
 
   const checkDailyGoal = () => {
-    // Handle the "Check your Daily Goal" action here
+    navigation.navigate("CheckYourDailyGoal");
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Track your Health</Text>
       <Image
-        source={require("C:/Users/hp/SmartFridge/assets/images/SmartFridgeLogo.png")}
+        source={require("../../../images/SmartFridgeLogo.png")}
         style={styles.logo}
       />
 
