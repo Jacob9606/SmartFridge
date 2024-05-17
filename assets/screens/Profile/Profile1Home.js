@@ -38,7 +38,6 @@ const Profile1Home = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Profile Icon */}
       <TouchableOpacity
         style={styles.profileIconContainer}
         onPress={navigateToJacobProfile}

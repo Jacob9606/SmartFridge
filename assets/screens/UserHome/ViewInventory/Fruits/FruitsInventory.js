@@ -7,15 +7,19 @@ import {
   FlatList,
   Image,
   TextInput,
+  Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getEmail } from "../../../clientStorage";
 import { BASE_URL } from "../../../../../config";
 
+const { width, height } = Dimensions.get("window");
+
 const FruitsInventory = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [fruitsData, setFruitsData] = useState([]); // Moved state declaration here
+  const [fruitsData, setFruitsData] = useState([]);
 
   useEffect(() => {
     fetchFruitsData();
@@ -30,7 +34,7 @@ const FruitsInventory = () => {
         throw new Error("Fetching profile was not ok");
       }
       const data = await response.json();
-      setFruitsData(data); // Set fruitsData state here
+      setFruitsData(data);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -66,16 +70,12 @@ const FruitsInventory = () => {
         onPress={() => {
           /* Logic to mark as bought */
         }}
-      >
-        <Text>✓</Text>
-      </TouchableOpacity>
+      ></TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
           /* Logic to delete item */
         }}
-      >
-        <Text>🗑</Text>
-      </TouchableOpacity>
+      ></TouchableOpacity>
     </View>
   );
 
@@ -84,31 +84,38 @@ const FruitsInventory = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Fridge Inventory</Text>
-      <TextInput
-        style={styles.searchBox}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-        placeholder="Search"
-      />
-      <FlatList
-        data={fruitsData}
-        renderItem={renderFruitItem}
-        keyExtractor={(item, index) => index.toString()} // Use index as key
-      />
-
-      <TouchableOpacity style={styles.addButton} onPress={addFruit}>
-        <Text style={styles.addButtonText}>Add Items</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView style={styles.safeContainer}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Fridge Inventory</Text>
+        <TextInput
+          style={styles.searchBox}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder="Search"
+        />
+        <FlatList
+          data={fruitsData}
+          renderItem={renderFruitItem}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={styles.flatListContent}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={addFruit}>
+          <Text style={styles.addButtonText}>Add Items</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
     paddingTop: 20,
+    paddingHorizontal: width * 0.05,
     backgroundColor: "#fff",
   },
   header: {
@@ -123,8 +130,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingLeft: 10,
-    marginHorizontal: 20,
     marginBottom: 10,
+    width: "100%",
+  },
+  flatListContent: {
+    paddingBottom: 80, // 추가된 여백
   },
   fruitItem: {
     flexDirection: "row",
@@ -133,7 +143,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginVertical: 8,
-    marginHorizontal: 16,
+    width: "100%",
   },
   fruitImage: {
     width: 50,
@@ -160,7 +170,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 25,
     alignItems: "center",
-    margin: 20,
+    marginTop: 10,
+    marginBottom: 20,
+    width: "100%",
   },
   addButtonText: {
     color: "white",

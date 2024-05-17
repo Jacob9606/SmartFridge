@@ -8,15 +8,8 @@ import {
   TextInput,
 } from "react-native";
 
-const initialItems = [
-  { id: "1", name: "Cabbage", checked: false },
-  { id: "2", name: "Milk", checked: false },
-  { id: "3", name: "Rice", checked: false },
-  // ... other items
-];
-
 const ShoppingList = () => {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState([]);
   const [newItemName, setNewItemName] = useState("");
 
   const markItemBought = (id) => {
@@ -43,9 +36,7 @@ const ShoppingList = () => {
       <TouchableOpacity
         onPress={() => markItemBought(item.id)}
         style={[styles.actionButton, item.checked && styles.checkedAction]}
-      >
-        <Text>✓</Text>
-      </TouchableOpacity>
+      ></TouchableOpacity>
       <TouchableOpacity
         onPress={() => deleteItem(item.id)}
         style={styles.actionButton}

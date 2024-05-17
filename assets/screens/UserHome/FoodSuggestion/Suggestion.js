@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -14,6 +15,8 @@ import { useNavigation } from "@react-navigation/native";
 import searchImage from "../../../images/search.png";
 import SmartFridgeHomeButtonImage from "../../../images/SmartFridgeHomeButton.png";
 import heartImage from "../../../images/heart.png";
+
+const { width, height } = Dimensions.get("window");
 
 const initialFoodSuggestions = [
   {
@@ -67,7 +70,7 @@ const Suggestion = () => {
 
   const handlePressRecipe = (name) => {
     // 예시: KoreanChickenRecipe 화면으로 이동
-    navigation.navigate("KoreanChickenRecipe");
+    navigation.navigate("Recipe");
   };
 
   const handlePressCustomize = () => {
@@ -110,6 +113,7 @@ const Suggestion = () => {
         data={foodSuggestions}
         renderItem={renderFoodItem}
         keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.flatListContent}
       />
       <TouchableOpacity style={styles.button} onPress={handlePressCustomize}>
         <Text style={styles.buttonText}>Customize Meal Plans</Text>
@@ -135,7 +139,11 @@ const Suggestion = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50, // Adjust the padding as needed
+    paddingTop: 50,
+  },
+  flatListContent: {
+    paddingBottom: 100,
+    paddingHorizontal: width * 0.05,
   },
   foodItem: {
     flexDirection: "row",
@@ -150,13 +158,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   foodImage: {
-    width: 50,
-    height: 50,
+    width: width * 0.15,
+    height: width * 0.15,
     marginRight: 10,
-    borderRadius: 25,
+    borderRadius: (width * 0.15) / 2,
   },
   foodName: {
     fontWeight: "bold",
+    fontSize: width * 0.04,
   },
   actions: {
     flexDirection: "row",
@@ -169,19 +178,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: width * 0.06,
+    height: width * 0.06,
   },
   button: {
     backgroundColor: "pink",
     padding: 15,
-    marginHorizontal: 10,
-    marginBottom: 10, // Move the button slightly up
+    marginHorizontal: width * 0.05,
+    marginBottom: 10,
     borderRadius: 25,
   },
   buttonText: {
     color: "white",
     textAlign: "center",
+    fontSize: width * 0.04,
   },
 });
 

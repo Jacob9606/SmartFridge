@@ -19,7 +19,7 @@ import ShoppingList from "./assets/screens/UserHome/CheckShoppingList/ShoppingLi
 import AddRecipe from "./assets/screens/UserHome/FoodSuggestion/AddRecipe";
 import CustomizedSuggestion from "./assets/screens/UserHome/FoodSuggestion/CustomizedSuggestion";
 import DietaryRestriction from "./assets/screens/UserHome/FoodSuggestion/DietaryRestriction";
-import KoreanChickenRecipe from "./assets/screens/UserHome/FoodSuggestion/KoreanChickenRecipe";
+import Recipe from "./assets/screens/UserHome/FoodSuggestion/Recipe";
 import Preference from "./assets/screens/UserHome/FoodSuggestion/Preference";
 import SavedMealPlans from "./assets/screens/UserHome/FoodSuggestion/SavedMealPlans";
 import Suggestion from "./assets/screens/UserHome/FoodSuggestion/Suggestion";
@@ -55,7 +55,7 @@ import AddVegetables from "./assets/screens/UserHome/ViewInventory/Vegetables/Ad
 import SetUpVegetables from "./assets/screens/UserHome/ViewInventory/Vegetables/SetUpVegetables";
 import VegetablesInventory from "./assets/screens/UserHome/ViewInventory/Vegetables/VegetablesInventory";
 import TestAlarm from "./assets/screens/Profile/TestAlarm";
-
+import Dashboard from "./assets/screens/Dashboard/DashBoard";
 const Stack = createStackNavigator();
 
 function App() {
@@ -77,7 +77,6 @@ function App() {
           component={ProfileMain}
           options={{ title: "ProfileMain" }}
         />
-
         <Stack.Screen
           name="Profile"
           component={Profile}
@@ -103,13 +102,11 @@ function App() {
           component={AddProfile}
           options={{ title: "AddProfile" }}
         />
-
         <Stack.Screen
           name="Profile1Home"
           component={Profile1Home}
           options={{ title: "Profile1Home" }}
         />
-
         <Stack.Screen
           name="SetAlarm"
           component={SetAlarm}
@@ -136,9 +133,9 @@ function App() {
           options={{ title: "DietaryRestriction" }}
         />
         <Stack.Screen
-          name="KoreanChickenRecipe"
-          component={KoreanChickenRecipe}
-          options={{ title: "KoreanChickenRecipe" }}
+          name="Recipe"
+          component={Recipe}
+          options={{ title: "Recipe" }}
         />
         <Stack.Screen
           name="Preference"
@@ -269,6 +266,11 @@ function App() {
           name="VegetablesInventory"
           component={VegetablesInventory}
           options={{ title: "VegetablesInventory" }}
+        />
+        <Stack.Screen
+          name="DashBoaord"
+          component={Dashboard}
+          options={{ title: "DashBoaord" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

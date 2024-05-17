@@ -54,11 +54,11 @@ const ProfileMain = () => {
       "이 프로필을 삭제하시겠습니까?",
       [
         {
-          text: "취소",
+          text: "Delete",
           style: "cancel",
         },
         {
-          text: "삭제",
+          text: "Delete",
           onPress: () => deleteProfile(profileId),
         },
       ],
@@ -78,7 +78,7 @@ const ProfileMain = () => {
     if (profiles.length < 4) {
       navigation.navigate("AddProfile");
     } else {
-      alert("프로필은 최대 4개까지 생성할 수 있습니다.");
+      alert("You can make 4 profiles only.");
     }
   };
 
@@ -89,7 +89,7 @@ const ProfileMain = () => {
   // Profile1Home 화면으로 이동하고 profileId를 저장하는 함수
   const handleProfilePress = async (profileId) => {
     await storeProfileId(profileId);
-    navigation.navigate("Profile1Home");
+    navigation.navigate("DashBoaord");
   };
 
   return (
@@ -114,22 +114,22 @@ const ProfileMain = () => {
                   style={styles.profileImage}
                 />
                 <Text style={styles.profileName}>{profile.name}</Text>
-                <Text style={styles.profileId}>{profile.profileId}</Text>
+                {/* <Text style={styles.profileId}>{profile.profileId}</Text> */}
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
               onPress={() => confirmDeleteProfile(profile.profileId)}
             >
-              <Text style={styles.deleteButtonText}>삭제</Text>
+              <Text style={styles.deleteButtonText}>Delete</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.deleteButtonText}
               onPress={testAlarm}
             >
               <Text style={styles}>Set Alarms</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         ))}
       </View>

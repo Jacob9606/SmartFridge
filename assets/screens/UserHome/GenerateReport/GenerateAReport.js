@@ -18,26 +18,8 @@ const GenerateAReport = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Generate a Report</Text>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Choose start date</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setStartDate}
-          value={startDate}
-          placeholder="DD/MM"
-        />
-        <Text style={styles.inputLabel}>Choose end date</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={setEndDate}
-          value={endDate}
-          placeholder="DD/MM"
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={generateReport}>
-        <Text style={styles.buttonText}>Generate Reports</Text>
-      </TouchableOpacity>
+      <Text style={styles.header}>Daily Report</Text>
+      <View style={styles.inputContainer}></View>
     </View>
   );
 };
@@ -57,7 +39,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "100%",
-    backgroundColor: "#f0f0f0",
+    height: "40%",
+    backgroundColor: "pink",
     borderRadius: 20,
     paddingHorizontal: 15,
     paddingVertical: 30,

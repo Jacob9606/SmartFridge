@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modifyButton: {
-    backgroundColor: "orange",
+    backgroundColor: "pink",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
